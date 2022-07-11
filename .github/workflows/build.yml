@@ -19,13 +19,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Checkout lndocs
-        uses: actions/checkout@v3
-        with:
-          repository: laminlabs/lndocs
-          ssh-key: ${{ secrets.READ_LNDOCS }}
-          path: lndocs
-          ref: main
       - name: Setup Python
         uses: actions/setup-python@v3
         with:
@@ -49,31 +42,3 @@ jobs:
       - name: Build
         run: |
           nox -s build --python ${{ matrix.python-version }}
-      - name: Codecov
-        uses: codecov/codecov-action@v2
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-      - name: Read lamin-project.yaml
-        id: lamin-project
-        uses: CumulusDS/get-yaml-paths-action@v0.1.0
-        with:
-          file: lamin-project.yaml
-          project_slug: project_slug
-      - name: Change base URL to project-slug
-        if: github.event_name == 'push'
-        run: |
-          mv _build/html/index.html _build/html/${{ steps.lamin-project.outputs.project_slug }}.html
-          mv _build/html _build/html_tmp
-          mkdir _build/html
-          mv _build/html_tmp _build/html/docs
-      - name: Deploy docs
-        id: netlify
-        uses: nwtgck/actions-netlify@v1.2
-        with:
-          publish-dir: "_build/html"
-          production-deploy: ${{ github.event_name == 'push' }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          enable-commit-comment: false
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
