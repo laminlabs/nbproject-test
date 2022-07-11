@@ -1,6 +1,11 @@
 import os
 from pathlib import Path
 
+from nbclient import NotebookClient
+from nbformat import NO_CONVERT
+from nbformat import read as read_nb
+from nbformat import write as write_nb
+
 
 def execute_notebooks(nb_folder: Path, write: bool = True):
     """Execute all notebooks in the folder.
@@ -9,11 +14,6 @@ def execute_notebooks(nb_folder: Path, write: bool = True):
         nb_folder: Path to folder with the notebooks to execute.
         write: If `True`, write the execution results to the notebooks.
     """
-    from nbclient import NotebookClient
-    from nbformat import NO_CONVERT
-    from nbformat import read as read_nb
-    from nbformat import write as write_nb
-
     env = dict(os.environ)
 
     os.chdir(nb_folder)
