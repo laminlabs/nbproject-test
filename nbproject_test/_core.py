@@ -10,6 +10,8 @@ from nbformat import write as write_nb
 def execute_notebooks(nb_folder: Path, write: bool = True):
     """Execute all notebooks in the folder.
 
+    Ignores .ipynb_checkpoints.
+
     Args:
         nb_folder: Path to folder with the notebooks to execute.
         write: If `True`, write the execution results to the notebooks.
