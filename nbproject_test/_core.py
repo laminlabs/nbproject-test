@@ -7,44 +7,56 @@ from nbformat import read as read_nb
 from nbformat import write as write_nb
 
 
-def execute_notebooks(nb_folder: Path, write: bool = True):
+def execute_notebooks(nb_file_folder: Path, write: bool = True):
     """Execute all notebooks in the folder.
 
     Ignores .ipynb_checkpoints.
 
     Args:
-        nb_folder: Path to folder with the notebooks to execute.
+        nb_file_folder: Path to folder with notebooks or a notebook to execute.
         write: If `True`, write the execution results to the notebooks.
     """
     env = dict(os.environ)
 
+    if nb_file_folder.is_file():
+        if nb_file_folder.suffix != ".ipynb":
+            print(f"The file {nb_file_folder} is not a notebook, ignoring.")
+            return
+
+        nb_folder = nb_file_folder.parent
+
+        notebooks = [nb_file_folder]
+
+    else:
+        nb_folder = nb_file_folder
+
+        # notebooks are part of documentation and indexed
+        # by a sphinx myst index.md file
+        # the order of execution matters!
+        notebooks = []
+
+        index_path = nb_folder / "index.md"
+        if index_path.exists():
+            with open(index_path) as f:
+                index = f.read()
+
+            # parse out indexed file list
+            if "```{toctree}" in index:
+                content = index.split("```{toctree}")[1]
+                content = content.split("\n\n")[1]
+                content = content.split("```")[0]
+
+                # if a file is a notebook, add it
+                for name in content.split():
+                    nb = nb_folder / f"{name}.ipynb"
+                    if nb.exists():
+                        notebooks.append(nb)
+
+        for nb in nb_folder.glob("./*.ipynb"):
+            if nb not in notebooks:
+                notebooks.append(nb)
+
     os.chdir(nb_folder)
-
-    # notebooks are part of documentation and indexed
-    # by a sphinx myst index.md file
-    # the order of execution matters!
-    notebooks = []
-
-    index_path = nb_folder / "index.md"
-    if index_path.exists():
-        with open(index_path) as f:
-            index = f.read()
-
-        # parse out indexed file list
-        if "```{toctree}" in index:
-            content = index.split("```{toctree}")[1]
-            content = content.split("\n\n")[1]
-            content = content.split("```")[0]
-
-            # if a file is a notebook, add it
-            for name in content.split():
-                nb = nb_folder / f"{name}.ipynb"
-                if nb.exists():
-                    notebooks.append(nb)
-
-    for nb in nb_folder.glob("./*.ipynb"):
-        if nb not in notebooks:
-            notebooks.append(nb)
 
     for nb in notebooks:
         if ".ipynb_checkpoints/" in str(nb):
