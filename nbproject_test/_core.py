@@ -28,7 +28,7 @@ def add_execution_count(nb):
         count += 1
 
 
-def execute_notebooks(nb_folder: Path, write: bool = True):
+def execute_notebooks(nb_file_folder: Path, write: bool = True):
     """Execute all notebooks in the folder.
 
     If `write` is `True`, will also add consecutive execution count numbers to
