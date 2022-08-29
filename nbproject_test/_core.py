@@ -7,8 +7,32 @@ from nbformat import read as read_nb
 from nbformat import write as write_nb
 
 
+def add_execution_count(nb):
+    """Add consecutive execution count.
+
+    Notebooks that are executed during CI automatically have consecutive count.
+
+    However, there is no interactive saving. Hence, add this count to the
+    notebook files before executing them.
+
+    Args:
+        nb: Notebook content (`nbproject.dev._notebook.Notebook`).
+    """
+    count = 1
+
+    for icell, cell in enumerate(nb.cells):
+        if cell["cell_type"] != "code" or cell["source"] == []:
+            continue
+
+        nb.cells[icell]["execution_count"] = count
+        count += 1
+
+
 def execute_notebooks(nb_file_folder: Path, write: bool = True):
     """Execute all notebooks in the folder.
+
+    If `write` is `True`, will also add consecutive execution count numbers to
+    make integrity check pass.
 
     Ignores .ipynb_checkpoints.
 
@@ -65,6 +89,10 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
         print(f"{nb_name}")
 
         nb_content = read_nb(nb, as_version=NO_CONVERT)
+
+        if write:
+            add_execution_count(nb_content)
+            write_nb(nb_content, nb)
 
         client = NotebookClient(nb_content)
 
