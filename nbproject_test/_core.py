@@ -7,6 +7,33 @@ from nbformat import read as read_nb
 from nbformat import write as write_nb
 
 
+def _list_nbs_in_md(nb_folder, md_filename="index.md"):
+    notebooks = []
+    names = []
+
+    index_path = nb_folder / md_filename
+    if index_path.exists():
+        with open(index_path) as f:
+            index = f.read()
+
+        # parse out indexed file list
+        if "```{toctree}" in index:
+            content = index.split("```{toctree}")[1]
+            content = content.split("\n\n")[1]
+            content = content.split("```")[0]
+
+            # if a file is a notebook, add it
+            # return non-notebook names
+            for name in content.split():
+                nb = nb_folder / f"{name}.ipynb"
+                if nb.exists():
+                    notebooks.append(nb)
+                else:
+                    names.append(name)
+
+    return notebooks, names
+
+
 def add_execution_count(nb):
     """Add consecutive execution count.
 
@@ -57,24 +84,12 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
         # notebooks are part of documentation and indexed
         # by a sphinx myst index.md file
         # the order of execution matters!
-        notebooks = []
-
-        index_path = nb_folder / "index.md"
-        if index_path.exists():
-            with open(index_path) as f:
-                index = f.read()
-
-            # parse out indexed file list
-            if "```{toctree}" in index:
-                content = index.split("```{toctree}")[1]
-                content = content.split("\n\n")[1]
-                content = content.split("```")[0]
-
-                # if a file is a notebook, add it
-                for name in content.split():
-                    nb = nb_folder / f"{name}.ipynb"
-                    if nb.exists():
-                        notebooks.append(nb)
+        notebooks, names = _list_nbs_in_md(nb_folder, md_filename="index.md")
+        for name in names:
+            md_filename = nb_folder / f"{name}.md"
+            if md_filename.exists():
+                notebooks_, _ = _list_nbs_in_md(nb_folder, md_filename=f"{name}.md")
+            notebooks += notebooks_
 
         for nb in nb_folder.glob("./*.ipynb"):
             if nb not in notebooks:
