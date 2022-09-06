@@ -89,7 +89,7 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
             md_filename = nb_folder / f"{name}.md"
             if md_filename.exists():
                 notebooks_, _ = _list_nbs_in_md(nb_folder, md_filename=f"{name}.md")
-            notebooks += notebooks_
+                notebooks += notebooks_
 
         for nb in nb_folder.glob("./*.ipynb"):
             if nb not in notebooks:
