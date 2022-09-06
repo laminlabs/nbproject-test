@@ -88,8 +88,12 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
         for name in names:
             md_filename = nb_folder / f"{name}.md"
             if md_filename.exists():
-                notebooks_, _ = _list_nbs_in_md(nb_folder, md_filename=f"{name}.md")
-                notebooks += notebooks_
+                try:
+                    notebooks_, _ = _list_nbs_in_md(nb_folder, md_filename=f"{name}.md")
+                    notebooks += notebooks_
+                except UnicodeDecodeError:
+                    print(f"Ignoring {name}.md due to special characters.")
+                    continue
 
         for nb in nb_folder.glob("./*.ipynb"):
             if nb not in notebooks:
