@@ -49,6 +49,7 @@ def pre_process_folder(nb_folder):
             new_stem = "-".join(path.stem.split("-")[1:])
             new_path = path.with_stem(new_stem)
             path.rename(new_path)
+            print(f"renaming {path} -> {new_path}")
 
 
 def add_execution_count(nb):
