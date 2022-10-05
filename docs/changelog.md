@@ -3,6 +3,7 @@
 <!-- prettier-ignore -->
 Name | PR | Developer | Date | Version
 --- | --- | --- | --- | ---
+🚸 Add a preprocessing function that strips prefixes | [8](https://github.com/laminlabs/nbproject-test/pull/8) | [falexwolf](https://github.com/falexwolf) | 2022-10-05 | 0.3.0
 🐛 Fix the error in the last PR | [7](https://github.com/laminlabs/nbproject-test/pull/7) | [Koncopd](https://github.com/Koncopd) | 2022-09-06 | 0.2.2
 🎨 Allow two level markdown files | [6](https://github.com/laminlabs/nbproject-test/pull/6) | [sunnyosun](https://github.com/sunnyosun) | 2022-09-06 | 0.2.1
 ✨ Write consecutive cell numbers | [5](https://github.com/laminlabs/nbproject-test/pull/5) | [falexwolf](https://github.com/falexwolf) | 2022-08-29 | 0.2.0
