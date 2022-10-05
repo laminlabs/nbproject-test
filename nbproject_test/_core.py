@@ -34,6 +34,24 @@ def _list_nbs_in_md(nb_folder, md_filename="index.md"):
     return notebooks, names
 
 
+def pre_process_folder(nb_folder):
+    # Test whether prefix of a notebook is a capital letter or a digit and if so,
+    # strip them for pretty & persistent URLs.
+
+    # We need the prefixes on notebooks to allow users to navigate downloaded
+    # notebooks that should display in order in a file browser.
+
+    notebook_paths = [path for path in nb_folder.glob("*") if path.suffix == ".ipynb"]
+
+    for path in notebook_paths:
+        prefix = path.stem[0]
+        if prefix.isdigit() or prefix.isupper() and "-" in path.stem:
+            new_stem = "-".join(path.stem.split("-")[1:])
+            new_path = path.with_stem(new_stem)
+            path.rename(new_path)
+            print(f"renaming {path} -> {new_path}")
+
+
 def add_execution_count(nb):
     """Add consecutive execution count.
 
@@ -80,6 +98,8 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
 
     else:
         nb_folder = nb_file_folder
+
+        pre_process_folder(nb_folder)
 
         # notebooks are part of documentation and indexed
         # by a sphinx myst index.md file
