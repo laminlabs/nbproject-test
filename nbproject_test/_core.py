@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 from pathlib import Path
 
 from nbclient import NotebookClient
@@ -34,6 +35,15 @@ def _list_nbs_in_md(nb_folder, md_filename="index.md"):
     return notebooks, names
 
 
+# https://stackoverflow.com/questions/41129921
+def datetime_valid(s: str):
+    try:
+        datetime.fromisoformat(s)
+    except ValueError:
+        return False
+    return True
+
+
 def pre_process_folder(nb_folder):
     # Test whether prefix of a notebook is a capital letter or a digit and if so,
     # strip them for pretty & persistent URLs.
@@ -44,7 +54,11 @@ def pre_process_folder(nb_folder):
     notebook_paths = [path for path in nb_folder.glob("*") if path.suffix == ".ipynb"]
 
     for path in notebook_paths:
+        # ignore dates
+        if datetime_valid(path.stem[:10]):
+            continue
         prefix = path.stem[0]
+        # rename notebooks that are pre-fixed with non-date numbers or capital letters
         if prefix.isdigit() or prefix.isupper() and "-" in path.stem:
             new_stem = "-".join(path.stem.split("-")[1:])
             # path.with_stem() is >3.9
