@@ -108,6 +108,8 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
         nb_file_folder: Path to folder with notebooks or a notebook to execute.
         write: If `True`, write the execution results to the notebooks.
     """
+    t_execute_start = perf_counter()
+
     env = dict(os.environ)
 
     if nb_file_folder.is_file():
@@ -174,3 +176,6 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
             msg += " and writing"
         msg += " the notebook (sec): %.3f" % (t_stop - t_start)
         print(msg)
+
+    total_time_elapsed = perf_counter() - t_execute_start
+    print("It took %.3f seconds to execute all the notebooks" % total_time_elapsed)
