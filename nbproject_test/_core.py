@@ -171,7 +171,7 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
 
         t_stop = perf_counter()
 
-        msg = "Time for executing"
+        msg = "Time for execution"
         if write:
             msg += " and writing"
         msg += " the notebook (sec): %.3f" % (t_stop - t_start)
