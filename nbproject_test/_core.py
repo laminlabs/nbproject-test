@@ -1,6 +1,7 @@
 import os
 from datetime import datetime
 from pathlib import Path
+from time import perf_counter
 
 from nbclient import NotebookClient
 from nbformat import NO_CONVERT
@@ -50,8 +51,11 @@ def pre_process_folder(nb_folder):
 
     # We need the prefixes on notebooks to allow users to navigate downloaded
     # notebooks that should display in order in a file browser.
+    print("Preprocessing the folder:", nb_folder)
 
     notebook_paths = [path for path in nb_folder.glob("*") if path.suffix == ".ipynb"]
+
+    t_start = perf_counter()
 
     for path in notebook_paths:
         # ignore dates
@@ -65,6 +69,10 @@ def pre_process_folder(nb_folder):
             new_path = path.with_name(f"{new_stem}{path.suffix}")
             path.rename(new_path)
             print(f"renaming {path} -> {new_path}")
+
+    t_stop = perf_counter()
+
+    print("Time to preprocess the folder (sec): %.3f" % (t_stop - t_start))
 
 
 def add_execution_count(nb):
@@ -140,7 +148,9 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
         if ".ipynb_checkpoints/" in str(nb):
             continue
         nb_name = str(nb.relative_to(nb_folder))
-        print(f"{nb_name}")
+        print("Executing the notebook:", nb_name)
+
+        t_start = perf_counter()
 
         nb_content = read_nb(nb, as_version=NO_CONVERT)
 
@@ -156,3 +166,11 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
 
         if write:
             write_nb(nb_content, nb)
+
+        t_stop = perf_counter()
+
+        msg = "Time for executing"
+        if write:
+            msg += " and writing"
+        msg += " the notebook (sec): %.3f" % (t_stop - t_start)
+        print(msg)
