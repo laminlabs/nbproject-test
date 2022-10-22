@@ -3,7 +3,7 @@
 <!-- prettier-ignore -->
 Name | PR | Developer | Date | Version
 --- | --- | --- | --- | ---
-:sparkles: Log time to execute notebooks | [11](https://github.com/laminlabs/nbproject-test/pull/11) | [Koncopd](https://github.com/Koncopd) | 2022-10-22 |
+✨ Log time to execute notebooks | [11](https://github.com/laminlabs/nbproject-test/pull/11) | [Koncopd](https://github.com/Koncopd) | 2022-10-22 | 0.3.2
 🐛 Ignore dates | [10](https://github.com/laminlabs/nbproject-test/pull/10) | [falexwolf](https://github.com/falexwolf) | 2022-10-18 |
 🚸 Add a preprocessing function that strips prefixes | [commit](https://github.com/laminlabs/nbproject-test/commit/d17e47088aec72acffcf29786369c9f2d041e9b6) | [falexwolf](https://github.com/falexwolf) | 2022-10-08 | 0.3.1
 🚸 Add a preprocessing function that strips prefixes | [8](https://github.com/laminlabs/nbproject-test/pull/8) | [falexwolf](https://github.com/falexwolf) | 2022-10-05 | 0.3.0
