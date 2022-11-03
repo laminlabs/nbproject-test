@@ -1,5 +1,5 @@
 """Testing for nbproject."""
 
-__version__ = "0.3.2"
+__version__ = "0.4.0"
 
 from ._core import execute_notebooks  # noqa
