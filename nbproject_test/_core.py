@@ -1,5 +1,4 @@
 import os
-from datetime import datetime
 from pathlib import Path
 from time import perf_counter
 
@@ -34,45 +33,6 @@ def _list_nbs_in_md(nb_folder, md_filename="index.md"):
                     names.append(name)
 
     return notebooks, names
-
-
-# https://stackoverflow.com/questions/41129921
-def datetime_valid(s: str):
-    try:
-        datetime.fromisoformat(s)
-    except ValueError:
-        return False
-    return True
-
-
-def pre_process_folder(nb_folder):
-    # Test whether prefix of a notebook is a capital letter or a digit and if so,
-    # strip them for pretty & persistent URLs.
-
-    # We need the prefixes on notebooks to allow users to navigate downloaded
-    # notebooks that should display in order in a file browser.
-    print("Preprocessing the folder:", nb_folder)
-
-    notebook_paths = [path for path in nb_folder.glob("*") if path.suffix == ".ipynb"]
-
-    t_start = perf_counter()
-
-    for path in notebook_paths:
-        # ignore dates
-        if datetime_valid(path.stem[:10]):
-            continue
-        prefix = path.stem[0]
-        # rename notebooks that are pre-fixed with non-date numbers or capital letters
-        if prefix.isdigit() or prefix.isupper() and "-" in path.stem:
-            new_stem = "-".join(path.stem.split("-")[1:])
-            # path.with_stem() is >3.9
-            new_path = path.with_name(f"{new_stem}{path.suffix}")
-            path.rename(new_path)
-            print(f"renaming {path} -> {new_path}")
-
-    t_stop = perf_counter()
-
-    print("Time to preprocess the folder (sec): %.3f" % (t_stop - t_start))
 
 
 def add_execution_count(nb):
@@ -124,8 +84,6 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
     else:
         nb_folder = nb_file_folder
 
-        pre_process_folder(nb_folder)
-
         # notebooks are part of documentation and indexed
         # by a sphinx myst index.md file
         # the order of execution matters!
@@ -150,7 +108,6 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
         if ".ipynb_checkpoints/" in str(nb):
             continue
         nb_name = str(nb.relative_to(nb_folder))
-        print("Executing the notebook:", nb_name)
 
         t_start = perf_counter()
 
@@ -171,11 +128,7 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
 
         t_stop = perf_counter()
 
-        msg = "Time for execution"
-        if write:
-            msg += " and writing"
-        msg += " the notebook (sec): %.3f" % (t_stop - t_start)
-        print(msg)
+        print(f"Executed {nb_name} in {(t_stop - t_start):.3f}s")
 
     total_time_elapsed = perf_counter() - t_execute_start
     print("It took %.3f seconds to execute all the notebooks" % total_time_elapsed)
