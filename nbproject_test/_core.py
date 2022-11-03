@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 from time import perf_counter
 
+from natsort import natsorted
 from nbclient import NotebookClient
 from nbformat import NO_CONVERT
 from nbformat import read as read_nb
@@ -98,9 +99,16 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
                     print(f"Ignoring {name}.md due to special characters.")
                     continue
 
+        notebooks_unindexed = []
         for nb in nb_folder.glob("./*.ipynb"):
             if nb not in notebooks:
-                notebooks.append(nb)
+                notebooks_unindexed.append(nb)
+
+        # also for unindexed notebooks the order matters!!!
+        # we'll sort them with natsort so that they can be prefixed
+        notebooks += natsorted(notebooks_unindexed)
+
+    print(f"Will test these notebooks: {notebooks}")
 
     os.chdir(nb_folder)
 

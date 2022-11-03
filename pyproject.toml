@@ -10,6 +10,7 @@ dynamic = ["version", "description"]
 dependencies = [
     "nbclient",
     "nbformat",
+    "natsort",
 ]
 
 [project.urls]
