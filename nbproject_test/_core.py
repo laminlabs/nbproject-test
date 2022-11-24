@@ -134,10 +134,9 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
 
         print(f"Executing {nb}.", flush=True)
 
-        # env["NBPRJ_TEST_NBPATH"] = str(nb)
+        env["NBPRJ_TEST_NBPATH"] = str(nb)
 
-        # client.execute(env=env)
-        client.execute()
+        client.execute(env=env)
 
         if write:
             write_nb(nb_content, nb)
