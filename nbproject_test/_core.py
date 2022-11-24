@@ -131,6 +131,9 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
             write_nb(nb_content, nb)
 
         client = NotebookClient(nb_content)  # noqa
+        client.on_cell_start = lambda cell, cell_index: print(
+            f"Starting cell {cell_index}, {cell}", flush=True
+        )
 
         print(f"Executing {nb}.", flush=True)
 
