@@ -1,12 +1,13 @@
-import os
+# import os
 from pathlib import Path
-from time import perf_counter
 
-from natsort import natsorted
-from nbclient import NotebookClient
-from nbformat import NO_CONVERT
-from nbformat import read as read_nb
-from nbformat import write as write_nb
+# from time import perf_counter
+
+# from natsort import natsorted
+# from nbclient import NotebookClient
+# from nbformat import NO_CONVERT
+# from nbformat import read as read_nb
+# from nbformat import write as write_nb
 
 
 def _list_nbs_in_md(nb_folder, md_filename="index.md"):
@@ -72,74 +73,74 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
     """
     print(f"Start executing notebooks in {nb_file_folder}.")
 
-    t_execute_start = perf_counter()
+    # t_execute_start = perf_counter()
 
-    env = dict(os.environ)
+    # env = dict(os.environ)
 
-    if nb_file_folder.is_file():
-        if nb_file_folder.suffix != ".ipynb":
-            print(f"The file {nb_file_folder} is not a notebook, ignoring.")
-            return
+    # if nb_file_folder.is_file():
+    #     if nb_file_folder.suffix != ".ipynb":
+    #         print(f"The file {nb_file_folder} is not a notebook, ignoring.")
+    #         return
 
-        nb_folder = nb_file_folder.parent
+    #     nb_folder = nb_file_folder.parent
 
-        notebooks = [nb_file_folder]
+    #     notebooks = [nb_file_folder]
 
-    else:
-        nb_folder = nb_file_folder
+    # else:
+    #     nb_folder = nb_file_folder
 
-        # notebooks are part of documentation and indexed
-        # by a sphinx myst index.md file
-        # the order of execution matters!
-        notebooks, names = _list_nbs_in_md(nb_folder, md_filename="index.md")
-        for name in names:
-            md_filename = nb_folder / f"{name}.md"
-            if md_filename.exists():
-                try:
-                    notebooks_, _ = _list_nbs_in_md(nb_folder, md_filename=f"{name}.md")
-                    notebooks += notebooks_
-                except UnicodeDecodeError:
-                    print(f"Ignoring {name}.md due to special characters.")
-                    continue
+    #     # notebooks are part of documentation and indexed
+    #     # by a sphinx myst index.md file
+    #     # the order of execution matters!
+    #     notebooks, names = _list_nbs_in_md(nb_folder, md_filename="index.md")
+    #     for name in names:
+    #         md_filename = nb_folder / f"{name}.md"
+    #         if md_filename.exists():
+    #             try:
+    #                 notebooks_, _ = _list_nbs_in_md(nb_folder, md_filename=f"{name}.md")  # noqa
+    #                 notebooks += notebooks_
+    #             except UnicodeDecodeError:
+    #                 print(f"Ignoring {name}.md due to special characters.")
+    #                 continue
 
-        notebooks_unindexed = []
-        for nb in nb_folder.glob("./*.ipynb"):
-            if nb not in notebooks:
-                notebooks_unindexed.append(nb)
+    #     notebooks_unindexed = []
+    #     for nb in nb_folder.glob("./*.ipynb"):
+    #         if nb not in notebooks:
+    #             notebooks_unindexed.append(nb)
 
-        # also for unindexed notebooks the order matters!!!
-        # we'll sort them with natsort so that they can be prefixed
-        notebooks += natsorted(notebooks_unindexed)
+    #     # also for unindexed notebooks the order matters!!!
+    #     # we'll sort them with natsort so that they can be prefixed
+    #     notebooks += natsorted(notebooks_unindexed)
 
-    print(f"Will test these notebooks: {notebooks}")
+    # print(f"Will test these notebooks: {notebooks}")
 
-    os.chdir(nb_folder)
+    # os.chdir(nb_folder)
 
-    for nb in notebooks:
-        if ".ipynb_checkpoints/" in str(nb):
-            continue
-        nb_name = str(nb.relative_to(nb_folder))
+    # for nb in notebooks:
+    #     if ".ipynb_checkpoints/" in str(nb):
+    #         continue
+    #     nb_name = str(nb.relative_to(nb_folder))
 
-        t_start = perf_counter()
+    #     t_start = perf_counter()
 
-        nb_content = read_nb(nb, as_version=NO_CONVERT)
+    #     nb_content = read_nb(nb, as_version=NO_CONVERT)
 
-        if write:
-            add_execution_count(nb_content)
-            write_nb(nb_content, nb)
+    #     if write:
+    #         add_execution_count(nb_content)
+    #         write_nb(nb_content, nb)
 
-        client = NotebookClient(nb_content)
+    #     client = NotebookClient(nb_content)
 
-        env["NBPRJ_TEST_NBPATH"] = str(nb)
+    #     env["NBPRJ_TEST_NBPATH"] = str(nb)
 
-        client.execute(env=env)
+    #     client.execute(env=env)
 
-        if write:
-            write_nb(nb_content, nb)
+    #     if write:
+    #         write_nb(nb_content, nb)
 
-        t_stop = perf_counter()
+    #     t_stop = perf_counter()
 
-        print(f"Executed {nb_name} in {(t_stop - t_start):.3f}s")
+    #     print(f"Executed {nb_name} in {(t_stop - t_start):.3f}s")
 
-    total_time_elapsed = perf_counter() - t_execute_start
-    print("It took %.3f seconds to execute all the notebooks" % total_time_elapsed)
+    # total_time_elapsed = perf_counter() - t_execute_start
+    # print("It took %.3f seconds to execute all the notebooks" % total_time_elapsed)
