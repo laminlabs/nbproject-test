@@ -3,11 +3,10 @@ from pathlib import Path
 from time import perf_counter
 
 from natsort import natsorted
-
-# from nbclient import NotebookClient
-# from nbformat import NO_CONVERT
-# from nbformat import read as read_nb
-# from nbformat import write as write_nb
+from nbclient import NotebookClient
+from nbformat import NO_CONVERT
+from nbformat import read as read_nb
+from nbformat import write as write_nb
 
 
 def _list_nbs_in_md(nb_folder, md_filename="index.md"):
@@ -116,33 +115,34 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
 
     print(f"Will test these notebooks: {notebooks}")
 
-    # os.chdir(nb_folder)
+    os.chdir(nb_folder)
 
-    # for nb in notebooks:
-    #     if ".ipynb_checkpoints/" in str(nb):
-    #         continue
-    #     nb_name = str(nb.relative_to(nb_folder))
+    for nb in notebooks:
+        if ".ipynb_checkpoints/" in str(nb):
+            continue
+        nb_name = str(nb.relative_to(nb_folder))
 
-    #     t_start = perf_counter()
+        t_start = perf_counter()
 
-    #     nb_content = read_nb(nb, as_version=NO_CONVERT)
+        nb_content = read_nb(nb, as_version=NO_CONVERT)
 
-    #     if write:
-    #         add_execution_count(nb_content)
-    #         write_nb(nb_content, nb)
+        if write:
+            add_execution_count(nb_content)
+            write_nb(nb_content, nb)
 
-    #     client = NotebookClient(nb_content)
+        client = NotebookClient(nb_content)
 
-    #     env["NBPRJ_TEST_NBPATH"] = str(nb)
+        # env["NBPRJ_TEST_NBPATH"] = str(nb)
 
-    #     client.execute(env=env)
+        # client.execute(env=env)
+        client.execute()
 
-    #     if write:
-    #         write_nb(nb_content, nb)
+        if write:
+            write_nb(nb_content, nb)
 
-    #     t_stop = perf_counter()
+        t_stop = perf_counter()
 
-    #     print(f"Executed {nb_name} in {(t_stop - t_start):.3f}s")
+        print(f"Executed {nb_name} in {(t_stop - t_start):.3f}s")
 
     total_time_elapsed = perf_counter() - t_execute_start
     print("It took %.3f seconds to execute all the notebooks" % total_time_elapsed)
