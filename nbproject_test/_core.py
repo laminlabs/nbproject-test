@@ -15,7 +15,7 @@ def _list_nbs_in_md(nb_folder, md_filename="index.md"):
 
     index_path = nb_folder / md_filename
     if index_path.exists():
-        print(f"Reading{index_path}.")
+        print(f"Reading{index_path}.", flush=True)
         with open(index_path) as f:
             index = f.read()
 
@@ -70,7 +70,7 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
         nb_file_folder: Path to folder with notebooks or a notebook to execute.
         write: If `True`, write the execution results to the notebooks.
     """
-    print(f"Start executing notebooks in {nb_file_folder}.")
+    print(f"Start executing notebooks in {nb_file_folder}.", flush=True)
 
     t_execute_start = perf_counter()
 
@@ -78,7 +78,7 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
 
     if nb_file_folder.is_file():
         if nb_file_folder.suffix != ".ipynb":
-            print(f"The file {nb_file_folder} is not a notebook, ignoring.")
+            print(f"The file {nb_file_folder} is not a notebook, ignoring.", flush=True)
             return
 
         nb_folder = nb_file_folder.parent
@@ -101,7 +101,7 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
                     )  # noqa
                     notebooks += notebooks_
                 except UnicodeDecodeError:
-                    print(f"Ignoring {name}.md due to special characters.")
+                    print(f"Ignoring {name}.md due to special characters.", flush=True)
                     continue
 
         notebooks_unindexed = []
@@ -113,7 +113,7 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
         # we'll sort them with natsort so that they can be prefixed
         notebooks += natsorted(notebooks_unindexed)
 
-    print(f"Will test these notebooks: {notebooks}")
+    print(f"Will test these notebooks: {notebooks}", flush=True)
 
     os.chdir(nb_folder)
 
@@ -132,17 +132,22 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
 
         client = NotebookClient(nb_content)  # noqa
 
+        print(f"Executing {nb}.", flush=True)
+
         # env["NBPRJ_TEST_NBPATH"] = str(nb)
 
         # client.execute(env=env)
-        #        client.execute()
+        client.execute()
 
         if write:
             write_nb(nb_content, nb)
 
         t_stop = perf_counter()
 
-        print(f"Executed {nb_name} in {(t_stop - t_start):.3f}s")
+        print(f"Executed {nb_name} in {(t_stop - t_start):.3f}s", flush=True)
 
     total_time_elapsed = perf_counter() - t_execute_start
-    print("It took %.3f seconds to execute all the notebooks" % total_time_elapsed)
+    print(
+        "It took %.3f seconds to execute all the notebooks" % total_time_elapsed,
+        flush=True,
+    )
