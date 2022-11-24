@@ -15,6 +15,7 @@ def _list_nbs_in_md(nb_folder, md_filename="index.md"):
 
     index_path = nb_folder / md_filename
     if index_path.exists():
+        print(f"Reading{index_path}.")
         with open(index_path) as f:
             index = f.read()
 
@@ -69,6 +70,8 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
         nb_file_folder: Path to folder with notebooks or a notebook to execute.
         write: If `True`, write the execution results to the notebooks.
     """
+    print(f"Start executing notebooks in {nb_file_folder}.")
+
     t_execute_start = perf_counter()
 
     env = dict(os.environ)
