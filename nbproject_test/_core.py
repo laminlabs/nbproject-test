@@ -130,12 +130,12 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
             add_execution_count(nb_content)
             write_nb(nb_content, nb)
 
-        client = NotebookClient(nb_content)
+        client = NotebookClient(nb_content)  # noqa
 
         # env["NBPRJ_TEST_NBPATH"] = str(nb)
 
         # client.execute(env=env)
-        client.execute()
+        #        client.execute()
 
         if write:
             write_nb(nb_content, nb)
