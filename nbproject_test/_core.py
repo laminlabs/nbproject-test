@@ -15,7 +15,7 @@ def _list_nbs_in_md(nb_folder, md_filename="index.md"):
 
     index_path = nb_folder / md_filename
     if index_path.exists():
-        print(f"Reading{index_path}.", flush=True)
+        print(f"Reading {index_path}.", flush=True)
         with open(index_path) as f:
             index = f.read()
 
