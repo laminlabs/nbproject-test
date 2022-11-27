@@ -58,7 +58,13 @@ def add_execution_count(nb):
         count += 1
 
 
-def execute_notebooks(nb_file_folder: Path, write: bool = True):
+def _print_starting_cell(cell, cell_index):
+    print(f"Starting cell {cell_index}, {cell}.", flush=True)
+
+
+def execute_notebooks(
+    nb_file_folder: Path, write: bool = True, print_cells: bool = False
+):
     """Execute all notebooks in the folder.
 
     If `write` is `True`, will also add consecutive execution count numbers to
@@ -68,7 +74,9 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
 
     Args:
         nb_file_folder: Path to folder with notebooks or a notebook to execute.
-        write: If `True`, write the execution results to the notebooks.
+        write: If `True`, writes the execution results to the notebooks.
+        print_cells: If `True`, prints cell indices and content
+        on the start of the execution.
     """
     print(f"Start executing notebooks in {nb_file_folder}.", flush=True)
 
@@ -129,6 +137,9 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
             write_nb(nb_content, nb)
 
         client = NotebookClient(nb_content)
+
+        if print_cells:
+            client.on_cell_start = _print_starting_cell
 
         env["NBPRJ_TEST_NBPATH"] = str(nb)
 
