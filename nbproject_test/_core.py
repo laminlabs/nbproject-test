@@ -15,7 +15,7 @@ def _list_nbs_in_md(nb_folder, md_filename="index.md"):
 
     index_path = nb_folder / md_filename
     if index_path.exists():
-        print(f"Reading{index_path}.")
+        print(f"Reading {index_path}.", flush=True)
         with open(index_path) as f:
             index = f.read()
 
@@ -58,7 +58,13 @@ def add_execution_count(nb):
         count += 1
 
 
-def execute_notebooks(nb_file_folder: Path, write: bool = True):
+def _print_starting_cell(cell, cell_index):
+    print(f"Starting cell {cell_index}, {cell}.", flush=True)
+
+
+def execute_notebooks(
+    nb_file_folder: Path, write: bool = True, print_cells: bool = False
+):
     """Execute all notebooks in the folder.
 
     If `write` is `True`, will also add consecutive execution count numbers to
@@ -68,9 +74,11 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
 
     Args:
         nb_file_folder: Path to folder with notebooks or a notebook to execute.
-        write: If `True`, write the execution results to the notebooks.
+        write: If `True`, writes the execution results to the notebooks.
+        print_cells: If `True`, prints cell indices and content
+        on the start of the execution.
     """
-    print(f"Start executing notebooks in {nb_file_folder}.")
+    print(f"Start executing notebooks in {nb_file_folder}.", flush=True)
 
     t_execute_start = perf_counter()
 
@@ -78,7 +86,7 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
 
     if nb_file_folder.is_file():
         if nb_file_folder.suffix != ".ipynb":
-            print(f"The file {nb_file_folder} is not a notebook, ignoring.")
+            print(f"{nb_file_folder} is not a notebook, ignoring.", flush=True)
             return
 
         nb_folder = nb_file_folder.parent
@@ -99,7 +107,7 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
                     notebooks_, _ = _list_nbs_in_md(nb_folder, md_filename=f"{name}.md")
                     notebooks += notebooks_
                 except UnicodeDecodeError:
-                    print(f"Ignoring {name}.md due to special characters.")
+                    print(f"Ignoring {name}.md due to special characters.", flush=True)
                     continue
 
         notebooks_unindexed = []
@@ -111,7 +119,7 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
         # we'll sort them with natsort so that they can be prefixed
         notebooks += natsorted(notebooks_unindexed)
 
-    print(f"Will test these notebooks: {notebooks}")
+    print(f"Will execute these notebooks: {notebooks}.", flush=True)
 
     os.chdir(nb_folder)
 
@@ -130,6 +138,9 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
 
         client = NotebookClient(nb_content)
 
+        if print_cells:
+            client.on_cell_start = _print_starting_cell
+
         env["NBPRJ_TEST_NBPATH"] = str(nb)
 
         client.execute(env=env)
@@ -139,7 +150,10 @@ def execute_notebooks(nb_file_folder: Path, write: bool = True):
 
         t_stop = perf_counter()
 
-        print(f"Executed {nb_name} in {(t_stop - t_start):.3f}s")
+        print(f"Executed {nb_name} in {(t_stop - t_start):.3f}s", flush=True)
 
     total_time_elapsed = perf_counter() - t_execute_start
-    print("It took %.3f seconds to execute all the notebooks" % total_time_elapsed)
+    print(
+        "It took %.3f seconds to execute all the notebooks" % total_time_elapsed,
+        flush=True,
+    )

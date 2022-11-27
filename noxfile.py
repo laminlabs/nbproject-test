@@ -13,4 +13,4 @@ def lint(session: nox.Session) -> None:
 @nox.session(python=["3.9"])
 def build(session):
     session.install(".[dev,test]")
-    session.run("pytest")
+    session.run("pytest", "-s")

@@ -10,4 +10,4 @@ def test_execute_folder():
 
 
 def test_execute_file():
-    execute_notebooks(nb_folder / "test.ipynb", write=False)
+    execute_notebooks(nb_folder / "test.ipynb", write=False, print_cells=True)
