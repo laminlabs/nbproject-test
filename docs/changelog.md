@@ -3,6 +3,7 @@
 <!-- prettier-ignore -->
 Name | PR | Developer | Date | Version
 --- | --- | --- | --- | ---
+💄 Prettify logging | [16](https://github.com/laminlabs/nbproject-test/pull/16) | [falexwolf](https://github.com/falexwolf) | 2022-12-08 |
 🔊 Improve logging | [15](https://github.com/laminlabs/nbproject-test/pull/15) | [Koncopd](https://github.com/Koncopd) | 2022-11-27 | 0.4.1
 🔥 Remove preprocessing | [12](https://github.com/laminlabs/nbproject-test/pull/12) | [falexwolf](https://github.com/falexwolf) | 2022-11-03 | 0.4.0
 ✨ Log time to execute notebooks | [11](https://github.com/laminlabs/nbproject-test/pull/11) | [Koncopd](https://github.com/Koncopd) | 2022-10-22 | 0.3.2
