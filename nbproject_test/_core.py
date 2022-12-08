@@ -15,7 +15,7 @@ def _list_nbs_in_md(nb_folder, md_filename="index.md"):
 
     index_path = nb_folder / md_filename
     if index_path.exists():
-        print(f"Reading {index_path}.", flush=True)
+        print(f"Reading {index_path}", flush=True)
         with open(index_path) as f:
             index = f.read()
 
@@ -86,7 +86,7 @@ def execute_notebooks(
 
     if nb_file_folder.is_file():
         if nb_file_folder.suffix != ".ipynb":
-            print(f"{nb_file_folder} is not a notebook, ignoring.", flush=True)
+            print(f"{nb_file_folder} is not a notebook, ignoring", flush=True)
             return
 
         nb_folder = nb_file_folder.parent
@@ -107,7 +107,7 @@ def execute_notebooks(
                     notebooks_, _ = _list_nbs_in_md(nb_folder, md_filename=f"{name}.md")
                     notebooks += notebooks_
                 except UnicodeDecodeError:
-                    print(f"Ignoring {name}.md due to special characters.", flush=True)
+                    print(f"Ignoring {name}.md due to special characters", flush=True)
                     continue
 
         notebooks_unindexed = []
