@@ -15,7 +15,7 @@ def _list_nbs_in_md(nb_folder, md_filename="index.md"):
 
     index_path = nb_folder / md_filename
     if index_path.exists():
-        print(f"Reading {index_path}.", flush=True)
+        print(f"Reading {index_path}", flush=True)
         with open(index_path) as f:
             index = f.read()
 
@@ -78,7 +78,7 @@ def execute_notebooks(
         print_cells: If `True`, prints cell indices and content
         on the start of the execution.
     """
-    print(f"Start executing notebooks in {nb_file_folder}.", flush=True)
+    print(f"Executing notebooks in {nb_file_folder}", flush=True)
 
     t_execute_start = perf_counter()
 
@@ -86,7 +86,7 @@ def execute_notebooks(
 
     if nb_file_folder.is_file():
         if nb_file_folder.suffix != ".ipynb":
-            print(f"{nb_file_folder} is not a notebook, ignoring.", flush=True)
+            print(f"{nb_file_folder} is not a notebook, ignoring", flush=True)
             return
 
         nb_folder = nb_file_folder.parent
@@ -107,7 +107,7 @@ def execute_notebooks(
                     notebooks_, _ = _list_nbs_in_md(nb_folder, md_filename=f"{name}.md")
                     notebooks += notebooks_
                 except UnicodeDecodeError:
-                    print(f"Ignoring {name}.md due to special characters.", flush=True)
+                    print(f"Ignoring {name}.md due to special characters", flush=True)
                     continue
 
         notebooks_unindexed = []
@@ -119,14 +119,13 @@ def execute_notebooks(
         # we'll sort them with natsort so that they can be prefixed
         notebooks += natsorted(notebooks_unindexed)
 
-    print(f"Will execute these notebooks: {notebooks}.", flush=True)
+    print(f"Scheduled: {[nb.stem for nb in notebooks]}", flush=True)
 
     os.chdir(nb_folder)
 
     for nb in notebooks:
         if ".ipynb_checkpoints/" in str(nb):
             continue
-        nb_name = str(nb.relative_to(nb_folder))
 
         t_start = perf_counter()
 
@@ -140,6 +139,7 @@ def execute_notebooks(
 
         if print_cells:
             client.on_cell_start = _print_starting_cell
+        print(f"{nb.stem}", end=" ", flush=True)
 
         env["NBPRJ_TEST_NBPATH"] = str(nb)
 
@@ -150,10 +150,10 @@ def execute_notebooks(
 
         t_stop = perf_counter()
 
-        print(f"Executed {nb_name} in {(t_stop - t_start):.3f}s", flush=True)
+        print(f"✓ ({(t_stop - t_start):.3f}s)", flush=True)
 
     total_time_elapsed = perf_counter() - t_execute_start
     print(
-        "It took %.3f seconds to execute all the notebooks" % total_time_elapsed,
+        f"Total time: {total_time_elapsed:.3f}s",
         flush=True,
     )
