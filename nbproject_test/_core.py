@@ -78,7 +78,7 @@ def execute_notebooks(
         print_cells: If `True`, prints cell indices and content
         on the start of the execution.
     """
-    print(f"Start executing notebooks in {nb_file_folder}.", flush=True)
+    print(f"Executing notebooks in {nb_file_folder}", flush=True)
 
     t_execute_start = perf_counter()
 
