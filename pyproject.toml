@@ -10,7 +10,8 @@ dynamic = ["version", "description"]
 dependencies = [
     "nbclient",
     "nbformat",
-    "natsort",
+    "ipykernel",
+    "natsort"
 ]
 
 [project.urls]
@@ -23,8 +24,7 @@ dev = [
 ]
 test = [
     "pytest>=6.0",
-    "pytest-cov",
-    "ipykernel"
+    "pytest-cov"
 ]
 
 [tool.black]
