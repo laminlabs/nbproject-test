@@ -71,7 +71,7 @@ def _print_cell_output(cell, cell_index, execute_reply):
         txt += "."
 
     if "outputs" in cell:
-        txt += f"Outputs: {cell['outputs']}."
+        txt += f" Outputs: {cell['outputs']}."
 
     print(txt, flush=True)
 
