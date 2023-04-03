@@ -62,8 +62,17 @@ def _print_starting_cell(cell, cell_index):
     print(f"Starting cell {cell_index}, {cell}.", flush=True)
 
 
+def _print_cell_reply(cell, cell_index, execute_reply):
+    print(
+        f"Executed cell {cell_index}, {cell}. The reply is {execute_reply}.", flush=True
+    )
+
+
 def execute_notebooks(
-    nb_file_folder: Path, write: bool = True, print_cells: bool = False
+    nb_file_folder: Path,
+    write: bool = True,
+    print_cells: bool = False,
+    print_reply: bool = False,
 ):
     """Execute all notebooks in the folder.
 
@@ -77,6 +86,7 @@ def execute_notebooks(
         write: If `True`, writes the execution results to the notebooks.
         print_cells: If `True`, prints cell indices and content
         on the start of the execution.
+        print_reply: If `True`, prints cell replies for all executed cells.
     """
     print(f"Executing notebooks in {nb_file_folder}", flush=True)
 
@@ -139,6 +149,9 @@ def execute_notebooks(
 
         if print_cells:
             client.on_cell_start = _print_starting_cell
+        if print_reply:
+            client.on_cell_executed = _print_cell_reply
+
         print(f"{nb.stem}", end=" ", flush=True)
 
         env["NBPRJ_TEST_NBPATH"] = str(nb)
