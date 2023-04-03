@@ -3,7 +3,7 @@
 <!-- prettier-ignore -->
 Name | PR | Developer | Date | Version
 --- | --- | --- | --- | ---
-✨ Print outputs for executed cells | [18](https://github.com/laminlabs/nbproject-test/pull/18) | [Koncopd](https://github.com/Koncopd) | 2023-04-03 |
+✨ Print outputs for executed cells | [18](https://github.com/laminlabs/nbproject-test/pull/18) | [Koncopd](https://github.com/Koncopd) | 2023-04-03 | 0.4.4
 ➕ Move ipykernel to main dependencies | [17](https://github.com/laminlabs/nbproject-test/pull/17) | [Koncopd](https://github.com/Koncopd) | 2023-03-21 | 0.4.3
 💄 Prettify logging | [16](https://github.com/laminlabs/nbproject-test/pull/16) | [falexwolf](https://github.com/falexwolf) | 2022-12-08 |
 🔊 Improve logging | [15](https://github.com/laminlabs/nbproject-test/pull/15) | [Koncopd](https://github.com/Koncopd) | 2022-11-27 | 0.4.1
