@@ -11,3 +11,7 @@ def test_execute_folder():
 
 def test_execute_file():
     execute_notebooks(nb_folder / "test.ipynb", write=False, print_cells=True)
+
+
+def test_execute_file_reply():
+    execute_notebooks(nb_folder / "test.ipynb", write=False, print_outputs=True)
