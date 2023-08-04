@@ -14,6 +14,9 @@ def _list_nbs_in_md(nb_folder, md_filename="index.md"):
     names = []
 
     index_path = nb_folder / md_filename
+    if not index_path.exists():
+        # see whether there is a file one level down
+        index_path = Path(nb_folder.as_posix() + ".md")
     if index_path.exists():
         print(f"Reading {index_path}", flush=True)
         with open(index_path) as f:
@@ -84,8 +87,8 @@ def execute_notebooks(
 ):
     """Execute all notebooks in the folder.
 
-    If `write` is `True`, will also add consecutive execution count numbers to
-    make integrity check pass.
+    If `write` is `True`, will also add consecutive execution count numbers
+    to make integrity check pass.
 
     Ignores .ipynb_checkpoints.
 
@@ -117,16 +120,19 @@ def execute_notebooks(
         # notebooks are part of documentation and indexed
         # by a sphinx myst index.md file
         # the order of execution matters!
-        notebooks, names = _list_nbs_in_md(nb_folder, md_filename="index.md")
-        for name in names:
-            md_filename = nb_folder / f"{name}.md"
-            if md_filename.exists():
-                try:
-                    notebooks_, _ = _list_nbs_in_md(nb_folder, md_filename=f"{name}.md")
-                    notebooks += notebooks_
-                except UnicodeDecodeError:
-                    print(f"Ignoring {name}.md due to special characters", flush=True)
-                    continue
+        notebooks, _ = _list_nbs_in_md(nb_folder, md_filename="index.md")
+
+        # nesting is problematic as notebooks might be in other folders but
+        # linked in these markdowns
+        # for name in names:
+        #     md_filename = nb_folder / f"{name}.md"
+        #     if md_filename.exists():
+        #         try:
+        #             notebooks_, _ = _list_nbs_in_md(nb_folder, md_filename=f"{name}.md")  # noqa
+        #             notebooks += notebooks_
+        #         except UnicodeDecodeError:
+        #             print(f"Ignoring {name}.md due to special characters", flush=True)
+        #             continue
 
         notebooks_unindexed = []
         for nb in nb_folder.glob("./*.ipynb"):
