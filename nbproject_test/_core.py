@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from time import perf_counter
+from typing import Iterable
 
 from natsort import natsorted
 from nbclient import NotebookClient
@@ -9,7 +10,7 @@ from nbformat import read as read_nb
 from nbformat import write as write_nb
 
 
-def _list_nbs_in_md(nb_folder, md_filename="index.md"):
+def _list_nbs_in_md(nb_folder: Path, md_filename="index.md"):
     notebooks = []
     names = []
 
@@ -81,6 +82,7 @@ def _print_cell_output(cell, cell_index, execute_reply):
 
 def execute_notebooks(
     nb_file_folder: Path,
+    skip_nbs: Iterable = None,
     write: bool = True,
     print_cells: bool = False,
     print_outputs: bool = False,
@@ -94,9 +96,10 @@ def execute_notebooks(
 
     Args:
         nb_file_folder: Path to folder with notebooks or a notebook to execute.
+        skip_nbs: Skip the execution of these notebooks.
         write: If `True`, writes the execution results to the notebooks.
         print_cells: If `True`, prints cell indices and content
-        on the start of the execution.
+                     on the start of the execution.
         print_outputs: If `True`, prints cell output for executed cells.
     """
     print(f"Executing notebooks in {nb_file_folder}", flush=True)
@@ -147,8 +150,11 @@ def execute_notebooks(
 
     os.chdir(nb_folder)
 
+    if not skip_nbs:
+        skip_nbs = set()
+
     for nb in notebooks:
-        if ".ipynb_checkpoints/" in str(nb):
+        if ".ipynb_checkpoints/" in str(nb) or nb in skip_nbs:
             continue
 
         t_start = perf_counter()
