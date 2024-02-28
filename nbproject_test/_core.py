@@ -148,6 +148,7 @@ def execute_notebooks(
 
     print(f"Scheduled: {[nb.stem for nb in notebooks]}", flush=True)
 
+    cwd = os.getcwd()
     os.chdir(nb_folder)
 
     if not skip_nbs:
@@ -190,3 +191,4 @@ def execute_notebooks(
         f"Total time: {total_time_elapsed:.3f}s",
         flush=True,
     )
+    os.chdir(cwd)
