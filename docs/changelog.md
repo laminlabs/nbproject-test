@@ -3,6 +3,7 @@
 <!-- prettier-ignore -->
 Name | PR | Developer | Date | Version
 --- | --- | --- | --- | ---
+🚸 Idempotent cwd switch | [22](https://github.com/laminlabs/nbproject-test/pull/22) | [falexwolf](https://github.com/falexwolf) | 2024-02-28 |
 Add skipping of testing of notebooks | [21](https://github.com/laminlabs/nbproject-test/pull/21) | [Zethson](https://github.com/Zethson) | 2023-12-05 |
 ♻️ Do not use nested tocs | [19](https://github.com/laminlabs/nbproject-test/pull/19) | [falexwolf](https://github.com/falexwolf) | 2023-08-04 | 0.4.5
 ✨ Print outputs for executed cells | [18](https://github.com/laminlabs/nbproject-test/pull/18) | [Koncopd](https://github.com/Koncopd) | 2023-04-03 | 0.4.4
