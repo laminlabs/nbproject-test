@@ -3,8 +3,8 @@
 <!-- prettier-ignore -->
 Name | PR | Developer | Date | Version
 --- | --- | --- | --- | ---
-🚸 Idempotent cwd switch | [22](https://github.com/laminlabs/nbproject-test/pull/22) | [falexwolf](https://github.com/falexwolf) | 2024-02-28 |
-Add skipping of testing of notebooks | [21](https://github.com/laminlabs/nbproject-test/pull/21) | [Zethson](https://github.com/Zethson) | 2023-12-05 |
+🚸 Idempotent cwd switch | [22](https://github.com/laminlabs/nbproject-test/pull/22) | [falexwolf](https://github.com/falexwolf) | 2024-02-28 | 0.5.1
+Add skipping of testing of notebooks | [21](https://github.com/laminlabs/nbproject-test/pull/21) | [Zethson](https://github.com/Zethson) | 2023-12-05 | 0.5.0
 ♻️ Do not use nested tocs | [19](https://github.com/laminlabs/nbproject-test/pull/19) | [falexwolf](https://github.com/falexwolf) | 2023-08-04 | 0.4.5
 ✨ Print outputs for executed cells | [18](https://github.com/laminlabs/nbproject-test/pull/18) | [Koncopd](https://github.com/Koncopd) | 2023-04-03 | 0.4.4
 ➕ Move ipykernel to main dependencies | [17](https://github.com/laminlabs/nbproject-test/pull/17) | [Koncopd](https://github.com/Koncopd) | 2023-03-21 | 0.4.3
