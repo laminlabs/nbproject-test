@@ -10,7 +10,7 @@ def lint(session: nox.Session) -> None:
     session.run("pre-commit", "run", "--all-files")
 
 
-@nox.session(python=["3.9"])
+@nox.session(python=["3.12"])
 def build(session):
     session.install(".[dev,test]")
     session.run("pytest", "-s")
