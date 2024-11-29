@@ -155,7 +155,7 @@ def execute_notebooks(
         skip_nbs = set()
 
     for nb in notebooks:
-        if ".ipynb_checkpoints/" in str(nb) or nb in skip_nbs:
+        if ".ipynb_checkpoints/" in str(nb) or nb.stem in skip_nbs:
             continue
 
         t_start = perf_counter()
