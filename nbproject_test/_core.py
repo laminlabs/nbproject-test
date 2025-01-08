@@ -97,6 +97,7 @@ def execute_notebooks(
     Args:
         nb_file_folder: Path to folder with notebooks or a notebook to execute.
         skip_nbs: Skip the execution of these notebooks.
+            Use the stem of the filename to indicate a notebook in the folder.
         write: If `True`, writes the execution results to the notebooks.
         print_cells: If `True`, prints cell indices and content
                      on the start of the execution.
@@ -156,6 +157,7 @@ def execute_notebooks(
 
     for nb in notebooks:
         if ".ipynb_checkpoints/" in str(nb) or nb.stem in skip_nbs:
+            print("skipped", nb)
             continue
 
         t_start = perf_counter()
