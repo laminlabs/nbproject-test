@@ -1,7 +1,6 @@
 import os
 from pathlib import Path
 from time import perf_counter
-from typing import Iterable
 
 from natsort import natsorted
 from nbclient import NotebookClient
@@ -82,7 +81,7 @@ def _print_cell_output(cell, cell_index, execute_reply):
 
 def execute_notebooks(
     nb_file_folder: Path,
-    skip_nbs: Iterable = None,
+    skip_nbs: list[str] | None = None,
     write: bool = True,
     print_cells: bool = False,
     print_outputs: bool = False,
@@ -147,16 +146,20 @@ def execute_notebooks(
         # we'll sort them with natsort so that they can be prefixed
         notebooks += natsorted(notebooks_unindexed)
 
-    print(f"Scheduled: {[nb.stem for nb in notebooks]}", flush=True)
+    if skip_nbs is None:
+        skip_nbs_set = set()
+    else:
+        skip_nbs_set = set(skip_nbs)
+
+    notebooks_filtered = [nb for nb in notebooks if nb.stem not in skip_nbs_set]
+
+    print(f"Scheduled: {[nb.stem for nb in notebooks_filtered]}", flush=True)
 
     cwd = os.getcwd()
     os.chdir(nb_folder)
 
-    if not skip_nbs:
-        skip_nbs = set()
-
-    for nb in notebooks:
-        if ".ipynb_checkpoints/" in str(nb) or nb.stem in skip_nbs:
+    for nb in notebooks_filtered:
+        if ".ipynb_checkpoints/" in str(nb):
             print("skipped", nb)
             continue
 

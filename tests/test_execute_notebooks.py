@@ -18,6 +18,4 @@ def test_execute_file_reply():
 
 
 def test_execute_skipped():
-    execute_notebooks(
-        nb_folder, skip_nbs={"skip.ipynb"}, write=False, print_outputs=True
-    )
+    execute_notebooks(nb_folder, skip_nbs={"skip"}, write=False, print_outputs=True)
